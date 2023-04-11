@@ -26,19 +26,19 @@ openai.api_key = os.environ['openai_api_key']
 # NLTK
 nltk.download("cmudict")
 cmudict = set(cmudict.dict())
-with open('extra_words.txt') as f:
+with open('Tickers/extra_words.txt') as f:
 	extra_words = set(f.read().splitlines())
-with open('allowed_tickers.txt') as f:
+with open('Tickers/allowed_tickers.txt') as f:
 	allowed_tickers = set(x.lower() for x in f.read().splitlines())
 WORDS = (cmudict | extra_words) - allowed_tickers
 nltk_tokenizer = RegexpTokenizer(r'\w+')
 
 # Symbols
-stocks = pd.read_csv('us_symbols.csv')
+stocks = pd.read_csv('Tickers/us_symbols.csv')
 stocks.set_index('ticker', drop=True, inplace=True)
-etfs = pd.read_csv('ETFs.csv')
+etfs = pd.read_csv('Tickers/ETFs.csv')
 etfs.set_index('fund_symbol', drop=True, inplace=True)
-mutual_funds = pd.read_csv('MutualFunds.csv')
+mutual_funds = pd.read_csv('Tickers/MutualFunds.csv')
 mutual_funds.set_index('fund_symbol', drop=True, inplace=True)
 TICKER_SET = set(stocks.index) | set(etfs.index) | set(mutual_funds.index)
 
@@ -51,7 +51,7 @@ CLIENT_ID = os.environ['reddit_client_id']
 CLIENT_SECRET = os.environ['reddit_client_secret']
 USER_AGENT = os.environ['reddit_user_agent']
 
-with open('subreddits.txt', 'r') as f:
+with open('Reddit/subreddits.txt', 'r') as f:
 	SUBREDDITS = f.read().splitlines()
 
 # Regex
@@ -64,7 +64,7 @@ SUB_REDDIT = re.compile(r"(?i)/?r/[a-z0-9_-]+")
 
 def log(*args, sep=' ', end='\n'):
 	print(*args, sep=sep, end=end)
-	with open('log.txt', 'a') as f:
+	with open('Data/log.txt', 'a') as f:
 		dt = datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S")
 		f.write(f'[{dt}] {sep.join(args)}{end}')
 
@@ -232,7 +232,7 @@ async def monitor_stream(async_stream):
 
 async def main():
 	log('Starting up program...')
-	with jsonlines.open('results.jsonl', 'a') as writer:
+	with jsonlines.open('Data/results.jsonl', 'a') as writer:
 		while True:
 			async for result in monitor_stream(reddit_stream):
 				writer.write(result)
