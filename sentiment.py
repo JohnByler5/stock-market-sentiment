@@ -222,7 +222,7 @@ async def monitor_stream(async_stream):
 				log(f'  ({duration}) - {detected}/{monitored} - {result["tickers"]}')
 				yield result
 
-		except (exceptions.RequestException, exceptions.ServerError, client_exceptions.ClientPayloadError, AssertionError) as e:
+		except (exceptions.RequestException, exceptions.ServerError, client_exceptions.ClientPayloadError, exceptions.ResponseException, AssertionError) as e:
 			attempts += 1
 			if attempts == 3:
 				raise e
