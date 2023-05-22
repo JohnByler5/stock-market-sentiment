@@ -8,7 +8,6 @@ from io import StringIO
 import asyncpraw
 import jsonlines
 import nltk
-import openai
 import pandas as pd
 import pytz
 import torch
@@ -19,9 +18,6 @@ from markdown import Markdown
 from nltk.corpus import cmudict
 from nltk.tokenize import RegexpTokenizer
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
-
-# OpenAI
-openai.api_key = os.environ['openai_api_key']
 
 # NLTK
 nltk.download("cmudict")
